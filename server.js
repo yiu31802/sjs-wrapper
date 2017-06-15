@@ -25,18 +25,21 @@ Server.prototype.start = function(PORT=3000){
           next();
       }
   };
-  var handler = this.handler
-  var endPoints = this.endPoints
+
+  handler = this.handler
 
   expApp.use(middleware.logger);
 
   expApp.get('/:app', function(req, res){
     app = req.params.app
-    if(_.contains(endPoints, app)) {
+    if(_.contains(this.endPoints, app)) {
       job = req.query;
       result = handler.get(app, job)
       if(result) res.send(result)
       else handler.add(app, job, res)
+    } else {
+      console.log("INFO: endpoint not found: (" + req.params.app +
+                  "), available endpoints are " + this.endPoints)
     }
   })
 
