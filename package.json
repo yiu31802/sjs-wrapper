@@ -1,0 +1,32 @@
+{
+  "name": "sjs-wrapper",
+  "version": "0.0.1",
+  "description": "Wrapper module to spark-jobserver",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yiu31802/sjs-wrapper.git"
+  },
+  "keywords": [
+    "spark",
+    "spark-jobserver"
+  ],
+  "author": "Junji Shimagaki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yiu31802/sjs-wrapper/issues"
+  },
+  "homepage": "https://github.com/yiu31802/sjs-wrapper#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "file-exists": "^4.0.0",
+    "home-path": "^1.0.5",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "shelljs": "^0.7.7",
+    "underscore": "^1.8.3"
+  }
+}
