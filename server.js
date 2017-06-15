@@ -35,8 +35,12 @@ Server.prototype.start = function(PORT=3000){
     if(_.contains(this.endPoints, app)) {
       job = req.query;
       result = handler.get(app, job)
-      if(result) res.send(result)
-      else handler.add(app, job, res)
+      if(result){
+        console.log("INFO: Output the result of " + app + ": " + JSON.stringify(job))
+        res.send(result)
+      } else {
+        handler.add(app, job, res)
+      }
     } else {
       console.log("INFO: endpoint not found: (" + req.params.app +
                   "), available endpoints are " + this.endPoints)

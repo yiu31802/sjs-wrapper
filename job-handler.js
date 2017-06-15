@@ -33,8 +33,9 @@ Handler.prototype.add = function(app, job, res){  // Adding jobs
   function wait_and_get(app, job, res){
     out = Handler.prototype.get(app, job)
     if(out == undefined){
-      setTimeout(() => wait_and_get(app, job, res), 3000)
+      setTimeout(() => wait_and_get(app, job, res), 1000)
     } else{
+      console.log("INFO: Output the result of " + app + ": " + JSON.stringify(job))
       res.send(out)
     }
   }
