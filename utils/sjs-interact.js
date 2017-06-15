@@ -16,7 +16,9 @@ function __errorHandlingPost(params, app, job, callback, sjsHome){
     } else if(err.message.includes('Error: connect ECONNREFUSED') && err.response == undefined){
       console.log("ERROR: POST is continuously failing. Restarting Spark...")
       restart(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), sjsHome)
-    } else {
+    } else if (err.response.body.result){
+      console.log("** Original Response** " + JSON.stringify(err.response.body))
+    }else {
       console.log("ERROR: Unknown error during POST. I think we have to restart SJS now. And then, resend a POST request.")
       restart(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), sjsHome)
     }
