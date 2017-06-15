@@ -10,6 +10,7 @@ var lmt_early = 5
 function __errorHandlingPost(params, app, job, callback, sjsHome){
   function f(err){
     console.log('ERROR: POST')
+    console.log(err)
     if(err.message == 'Error: socket hang up' && err.response == undefined){
       console.log("WARNING: This should be an error during POST. Retrying after 10 seconds...")
       setTimeout(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), 10000)
@@ -98,6 +99,12 @@ function __waitAndGet(params, job_id, app, job, callback, sjsHome){
       } else if(job_status == "RUNNING"){
         console.log("INFO: Job is not yet finished. Revisiting in 3 seconds.")
         setTimeout(function(){_iter(job_id, app, job)}, 3000)
+      } else if(job_status == "ERROR"){
+        _pushToCache(job, result_body)
+        console.log("INFO: Job returned error. Full error response is stored in cache.")
+        console.log("**Original Response (500 chars): " + JSON.stringify(result_body.result).substring(0, 500))
+        flag(false)
+        callback()
       }
     }
     return f
@@ -149,7 +156,6 @@ submitAndGetSparkResult = function(params, app, job, callback, sjsHome){
   // Step 1: POST a job
   flag(true)
   PromisePost = __sparkJobPost(params, app, job)
-  console.log("PromisePost")
 
   // Step 2: Ask for result by GET
   // Step 3: If result is available, push the result in cache.
