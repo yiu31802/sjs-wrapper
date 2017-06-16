@@ -51,6 +51,8 @@ Handler.prototype.add = function(app, job, res){  // Adding jobs
     gjobs.unshift(queue)
     if(!isRunning){
       this.start()
+    } else{
+      console.log("?? Job is already running thus no trigger..")
     }
     if(res != undefined){
       wait_and_get(app, job, res)
