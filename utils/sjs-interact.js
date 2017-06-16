@@ -47,7 +47,7 @@ function __errorHandlingGet(params, job_id, app, job, callback, sjsHome){
           if(cnt_early < lmt_early){
             console.log("INFO: Too-Early count: " + cnt_early)
             console.log("WARNING: Ok I see, I was just too early to ask for result. Let's wait and come back again now...")
-            __waitAndGet(job_id, res, app, job, jobs)
+            __waitAndGet(params, job_id, app, job, callback, sjsHome)
             cnt_early += 1
           } else {
             console.log("INFO: job-server's performance is getting bad. We'll restart SJS.")
@@ -65,7 +65,7 @@ function __errorHandlingGet(params, job_id, app, job, callback, sjsHome){
         console.log(job)
         if(cnt_early < lmt_early){
           console.log("INFO: Too-Early count: " + cnt_early)
-          __waitAndGet(job_id, res, app, job, jobs)
+          __waitAndGet(params, job_id, app, job, callback, sjsHome)
           cnt_early += 1
         } else {
           console.log("INFO: job-server's performance is getting bad. We'll restart SJS.")
@@ -79,6 +79,7 @@ function __errorHandlingGet(params, job_id, app, job, callback, sjsHome){
       }
     }
   }
+  return f
 }
 
 function __waitAndGet(params, job_id, app, job, callback, sjsHome){
@@ -124,6 +125,8 @@ function __waitAndGet(params, job_id, app, job, callback, sjsHome){
       }).
     then(
       _thenIterHandling(job_id, app, job)
+    ).catch(
+      __errorHandlingGet(params, job_id, app, job, callback, sjsHome)
     )
   }
 
