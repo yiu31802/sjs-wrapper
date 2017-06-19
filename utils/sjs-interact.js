@@ -10,7 +10,6 @@ var lmt_early = 5
 function __errorHandlingPost(params, app, job, callback, sjsHome){
   function f(err){
     console.log('ERROR: POST')
-    console.log(err)
     if(err.message == 'Error: socket hang up' && err.response == undefined){
       console.log("WARNING: This should be an error during POST. Retrying after 10 seconds...")
       setTimeout(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), 10000)
@@ -32,7 +31,11 @@ function __errorHandlingGet(params, job_id, app, job, callback, sjsHome){
   function f(err){
     console.log('ERROR: GET')
     // Type 1: SJS is unstable.
-    if(typeof err.response.body == 'object'){
+    if(err.response == undefined){
+      console.log("ERROR: SJS becomes unresponsive during GET. Restarting SJS...")
+      restart(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), sjsHome)
+      cnt_early = 1
+    } else if(typeof err.response.body == 'object'){
       err_result = err.response.body.result
       job_id = err.response.req.path.slice(6)
       console.log("**Original Response**: " + err_result)
@@ -74,6 +77,7 @@ function __errorHandlingGet(params, job_id, app, job, callback, sjsHome){
           cnt_early = 1
         }
       } else{ // In case of knowing nothing about the cause
+        console.log(err.response)
         console.log("ERROR: Unknown (either on your machine or on Spark-Jobserver)")
         console.log("INFO: Let's try again.")
         restart(() => submitAndGetSparkResult(params, app, job, callback, sjsHome), sjsHome)
