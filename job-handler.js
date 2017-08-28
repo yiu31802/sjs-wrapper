@@ -28,11 +28,18 @@ Handler.prototype.get = function(app, job){  // Only if cache is available
   if(matched_obj) return matched_obj['result']
 }
 
-Handler.prototype.add = function(app, job, res){  // Adding jobs
+Handler.prototype.len = function(app, job){
+  app_cache = _.filter(cache, x => app == x['app'])
+  matched_objs = _.filter(app_cache, x => _.isEqual(job, x['input']))
+  if(matched_objs) return matched_objs.length
+}
+
+Handler.prototype.add = function(app, job, res, forced){  // Adding jobs
 
   function wait_and_get(app, job, res){
     out = Handler.prototype.get(app, job)
-    if(out == undefined){
+    if(out == undefined
+      || (forced=="true" && init_length == Handler.prototype.len(app, job))){
       setTimeout(() => wait_and_get(app, job, res), 1000)
     } else{
       console.log("INFO: Output the result of " + app + ": " + JSON.stringify(job))
@@ -40,6 +47,7 @@ Handler.prototype.add = function(app, job, res){  // Adding jobs
     }
   }
 
+  let init_length = Handler.prototype.len(app, job)
   let queue = {app: app, job: job}
   let isRunning = (getFlag() || gjobs.length > 0)
   if(_.contains(gjobs, queue) || _.isEqual(job, getJob())){
