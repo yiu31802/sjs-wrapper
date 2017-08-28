@@ -26,7 +26,7 @@ own web server application (i.e., using `sjsWrapper.jobHandler`).
 Following [the example scenario][4] in `spark-jobserver` project:
 
 ```js
-var s = require('./server')
+var s = require('./sjs-server')
 S = new s(url="http://localhost:8090",
           classPathPrefix="spark.jobserver.",
           appName="Test",
@@ -66,7 +66,7 @@ setTimeout(
 
 # FAQ
 
-## Why `sjs-interact` is so long?
+## Why do we need an wrapper?
 
 Although `spark-jobserver` solely is a great tool, there are several bugs
 which you have to deal with when you deploy it. For example, you will have
