@@ -24,14 +24,14 @@ var Handler = function(url,
 
 Handler.prototype.get = function(app, job){  // Only if cache is available
   app_cache = _.filter(cache, x => app == x['app'])
-  matched_obj = _.filter(app_cache, x => _.isEqual(job, x['input']))[0]
-  if(matched_obj) return matched_obj['result']
+  matched_obj = _.filter(app_cache, x => _.isEqual(job, x['input']))
+  if(matched_obj.length) return _.last(matched_obj)['result']
 }
 
 Handler.prototype.len = function(app, job){
   app_cache = _.filter(cache, x => app == x['app'])
   matched_objs = _.filter(app_cache, x => _.isEqual(job, x['input']))
-  if(matched_objs) return matched_objs.length
+  return matched_objs.length
 }
 
 Handler.prototype.add = function(app, job, res, forced){  // Adding jobs
