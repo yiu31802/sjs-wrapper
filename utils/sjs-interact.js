@@ -1,4 +1,5 @@
 var rp = require('request-promise')
+var _ = require('underscore')
 
 var cache = require('./cache').cache
 var flag = require('./cache').flag
@@ -117,7 +118,14 @@ function __waitAndGet(params, job_id, app, job, callback, sjsHome){
   }
 
   function _pushToCache(job, content){
-    result_object = {app: app, input: job, result: content}
+    let query_object = {app: app, input: job}
+    let result_object = _.extend(_.clone(query_object), {result: content})
+    let all_query_objects = cache.map(x => _.omit(x, "result"))
+    let index = _.findIndex(all_query_objects, x => _.isEqual(x, query_object))
+    if(index != -1){
+      console.log("INFO: Deleting a result object from cache: " + JSON.stringify(query_object))
+      cache.splice(index, 1)
+    }
     cache.push(result_object)
   }
 
