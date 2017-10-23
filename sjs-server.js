@@ -1,5 +1,6 @@
 var express = require('express');
 var _ = require('underscore')
+var ctimeout = require('connect-timeout')
 
 var jobHandler = require('./job-handler')
 var restart_jobserver = require('./utils/sjs-restart')
@@ -15,7 +16,7 @@ var Server = function(url="http://localhost:8090",
   this.endPoints = endPoints
 }
 
-Server.prototype.start = function(PORT=3000){
+Server.prototype.start = function(PORT=3000, timeout='120s'){
 
   var expApp = express();
   var middleware = {
@@ -29,6 +30,7 @@ Server.prototype.start = function(PORT=3000){
   handler = this.handler
 
   expApp.use(middleware.logger);
+  expApp.use(ctimeout(timeout))
 
   expApp.get('/:app', function(req, res){
     app = req.params.app
