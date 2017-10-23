@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/yiu31802/sjs-wrapper#readme",
   "dependencies": {
+    "connect-timeout": "^1.9.0",
     "express": "^4.15.2",
     "file-exists": "^4.0.0",
     "home-path": "^1.0.5",
