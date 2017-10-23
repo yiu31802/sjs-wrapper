@@ -117,7 +117,13 @@ function __waitAndGet(params, job_id, app, job, callback, sjsHome){
   }
 
   function _pushToCache(job, content){
-    result_object = {app: app, input: job, result: content}
+    result_object =
+      {
+        app: app,
+        input: job,
+        result: content,
+        timestamp: (new Date()).toTimeString()
+      }
     cache.push(result_object)
   }
 
